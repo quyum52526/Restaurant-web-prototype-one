@@ -9,7 +9,7 @@ import { CHEFS, GALLERY, PHILOSOPHY } from "@/data/restaurant";
 
 export const metadata: Metadata = {
   title: "Our Story",
-  description: "Meet the chefs behind Aurum and the live-fire philosophy that shapes every plate.",
+  description: "Meet the chefs behind Ai Restaurant and the live-fire philosophy that shapes every plate.",
 };
 
 const PHILOSOPHY_ICONS = [Flame, Leaf, Recycle];
@@ -35,7 +35,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="Our Story"
         title={<>Cooked over <em className="text-gold-light">fire</em>, served with care</>}
-        intro="Aurum is a kitchen built around one hearth and a few simple rules: source close, cook with patience, waste nothing."
+        intro="Ai Restaurant is a kitchen built around one hearth and a few simple rules: source close, cook with patience, waste nothing."
       />
 
       {/* Philosophy */}
@@ -117,14 +117,14 @@ export default function AboutPage() {
       {/* Gallery */}
       <section className="border-t border-line py-24">
         <div className="container-lux">
-          <SectionHeading eyebrow="Inside Aurum" title={<>The room, the <em className="text-gold-light">fire</em>, the plates</>} />
+          <SectionHeading eyebrow="Inside Ai Restaurant" title={<>The room, the <em className="text-gold-light">fire</em>, the plates</>} />
           <div className="mt-14 grid auto-rows-[160px] grid-cols-2 gap-4 md:auto-rows-[220px] md:grid-cols-4">
             {GALLERY.map((src, i) => (
               <Reveal key={src} delay={i * 0.05} className={GALLERY_LAYOUT[i]}>
                 <div className="group relative h-full overflow-hidden rounded-3xl">
                   <SafeImage
                     src={src}
-                    alt={`Aurum restaurant photo ${i + 1}`}
+                    alt={`Ai Restaurant restaurant photo ${i + 1}`}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover transition duration-700 group-hover:scale-105"

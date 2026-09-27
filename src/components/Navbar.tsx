@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled || open ? "border-b border-line bg-ink/80 py-3 backdrop-blur-xl" : "py-5"
+        scrolled || open ? "border-b border-wine/60 bg-ink/80 py-3 backdrop-blur-xl" : "py-5"
       }`}
     >
       <div className="container-lux flex items-center justify-between">
@@ -51,7 +51,7 @@ export default function Navbar() {
             >
               {link.label}
               {isActive(link.href) && (
-                <span className="absolute inset-x-4 -bottom-0.5 h-px bg-gold" aria-hidden />
+                <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold" aria-hidden />
               )}
             </Link>
           ))}
@@ -68,7 +68,7 @@ export default function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid h-11 w-11 place-items-center rounded-full border border-cream/20 lg:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-cream/20 transition hover:border-gold hover:bg-wine/40 lg:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>

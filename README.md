@@ -1,4 +1,4 @@
-# Aurum — Luxury Restaurant Website
+# Ai Restaurant — Luxury Restaurant Website
 
 A multi-page restaurant site built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS** and **GSAP**.
 

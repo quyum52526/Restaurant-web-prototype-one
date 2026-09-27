@@ -7,7 +7,7 @@ import SafeImage from "./SafeImage";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-panel/60">
+    <footer className="border-t-2 border-wine bg-panel/60">
       <div className="container-lux grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.2fr] lg:py-20">
         <div className="space-y-5">
           <Logo />
@@ -87,8 +87,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-line">
-        <div className="container-lux flex flex-col items-center justify-between gap-2 py-6 text-xs text-cream/40 md:flex-row">
+      <div className="bg-wine-dark/60">
+        <div className="container-lux flex flex-col items-center justify-between gap-2 py-6 text-xs text-cream/60 md:flex-row">
           <p>© {new Date().getFullYear()} {RESTAURANT.name}. All rights reserved.</p>
           <p>Crafted with fire &amp; patience.</p>
         </div>

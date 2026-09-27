@@ -20,10 +20,15 @@ export const metadata: Metadata = {
   },
   description:
     "A luxury live-fire restaurant serving dry-aged steaks, day-boat seafood and seasonal plates. Explore the menu and reserve your table.",
+  applicationName: RESTAURANT.name,
+  icons: {
+    icon: RESTAURANT.logo,
+    apple: RESTAURANT.logo,
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0a09",
+  themeColor: "#881337",
 };
 
 export default function RootLayout({

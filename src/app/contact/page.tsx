@@ -6,7 +6,7 @@ import { HOURS, RESTAURANT } from "@/data/restaurant";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Opening hours, directions and how to reach the Aurum team.",
+  description: "Opening hours, directions and how to reach the Ai Restaurant team.",
 };
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(RESTAURANT.mapsQuery)}`;

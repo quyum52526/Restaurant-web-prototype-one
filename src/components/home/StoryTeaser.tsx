@@ -30,7 +30,7 @@ export default function StoryTeaser() {
           Where <em className="text-gold-light">fire</em> meets the finest of the field and sea.
         </h2>
         <p className="mt-6 text-base leading-relaxed text-cream/65">
-          Aurum began with a single wood-fired hearth and a simple belief: honest ingredients,
+          Ai Restaurant began with a single wood-fired hearth and a simple belief: honest ingredients,
           treated with patience, need very little else. Every plate we send out is cooked over
           live oak, seasoned by smoke, and built around what our farmers and fishermen bring
           through the door that morning.

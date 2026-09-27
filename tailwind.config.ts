@@ -13,10 +13,17 @@ const config: Config = {
         panel: "#15120f",
         line: "rgba(243, 236, 224, 0.1)",
         cream: "#f3ece0",
+        // Brand primary (amber).
         gold: {
-          DEFAULT: "#c9a45c",
-          light: "#e2c98f",
-          dark: "#9c7a3a",
+          DEFAULT: "#F59E0B",
+          light: "#FBBF24",
+          dark: "#B45309",
+        },
+        // Brand secondary (wine).
+        wine: {
+          DEFAULT: "#881337",
+          light: "#9F1239",
+          dark: "#4C0519",
         },
         // Driven by the --accent CSS variable, which GSAP tweens per dish.
         accent:

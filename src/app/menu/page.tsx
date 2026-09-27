@@ -5,7 +5,7 @@ import MenuBrowser from "@/components/menu/MenuBrowser";
 
 export const metadata: Metadata = {
   title: "Menu",
-  description: "Starters, live-fire mains, desserts and cocktails — the full Aurum menu.",
+  description: "Starters, live-fire mains, desserts and cocktails — the full Ai Restaurant menu.",
 };
 
 export default function MenuPage() {

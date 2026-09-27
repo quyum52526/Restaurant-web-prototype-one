@@ -5,7 +5,7 @@ import BookingForm from "@/components/reservations/BookingForm";
 
 export const metadata: Metadata = {
   title: "Reservations",
-  description: "Book a table at Aurum — choose your date, time and seating in a few taps.",
+  description: "Book a table at Ai Restaurant — choose your date, time and seating in a few taps.",
 };
 
 export default function ReservationsPage() {

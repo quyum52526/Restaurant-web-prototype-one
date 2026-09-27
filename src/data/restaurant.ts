@@ -45,16 +45,17 @@ const unsplash = (id: string, width = 900) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=80`;
 
 export const RESTAURANT = {
-  name: "Aurum",
+  name: "Ai Restaurant",
   tagline: "Fire, Field & Sea",
+  logo: "/logo.png",
   phone: "+1 (555) 014-2290",
-  email: "hello@aurum-dining.example",
+  email: "hello@ai-restaurant.example",
   address: {
     line1: "128 Harbour Lane",
     line2: "Old Town, Riverside 10021",
   },
   mapsQuery: "128 Harbour Lane Old Town",
-  instagram: "@aurum.dining",
+  instagram: "@ai.restaurant",
 };
 
 export const HOURS = [
@@ -244,7 +245,7 @@ export const CHEFS = [
   {
     name: "Elena Marchetti",
     role: "Executive Chef",
-    bio: "Trained in Emilia-Romagna and Lyon, Elena spent a decade in Michelin kitchens before opening Aurum around a single wood-fired hearth.",
+    bio: "Trained in Emilia-Romagna and Lyon, Elena spent a decade in Michelin kitchens before opening Ai Restaurant around a single wood-fired hearth.",
     image: unsplash("photo-1577219491135-ce391730fb2c", 700),
   },
   {
