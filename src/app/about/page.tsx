@@ -124,7 +124,7 @@ export default function AboutPage() {
                 <div className="group relative h-full overflow-hidden rounded-3xl">
                   <SafeImage
                     src={src}
-                    alt={`Ai Restaurant restaurant photo ${i + 1}`}
+                    alt={`Ai Restaurant photo ${i + 1}`}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover transition duration-700 group-hover:scale-105"

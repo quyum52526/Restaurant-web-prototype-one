@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="border-t-2 border-wine bg-panel/60">
       <div className="container-lux grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.2fr] lg:py-20">
         <div className="space-y-5">
-          <Logo />
+          <Logo imageClassName="h-20" />
           <p className="max-w-xs text-sm leading-relaxed text-cream/60">
             A live-fire kitchen cooking the best of the field and the sea, one hearth at a time.
           </p>

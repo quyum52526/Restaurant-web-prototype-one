@@ -2,16 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { RESTAURANT } from "@/data/restaurant";
 
-export default function Logo() {
+type LogoProps = {
+  /** Tailwind height classes for the illustration; width follows the artwork's aspect ratio. */
+  imageClassName?: string;
+};
+
+export default function Logo({ imageClassName = "h-12 md:h-14" }: LogoProps) {
   return (
     <Link href="/" className="group flex items-center gap-3" aria-label={`${RESTAURANT.name} home`}>
       <Image
         src={RESTAURANT.logo}
         alt=""
-        width={40}
-        height={40}
+        width={112}
+        height={112}
         priority
-        className="h-10 w-10 rounded-full ring-1 ring-gold/60 transition group-hover:ring-2 group-hover:ring-gold"
+        className={`${imageClassName} w-auto object-contain drop-shadow transition group-hover:scale-105`}
       />
       <span className="leading-none">
         <span className="block font-serif text-xl tracking-wide">{RESTAURANT.name}</span>
