@@ -5,7 +5,7 @@ import MenuBrowser from "@/components/menu/MenuBrowser";
 
 export const metadata: Metadata = {
   title: "Menu",
-  description: "Starters, live-fire mains, desserts and cocktails — the full Ai Restaurant menu.",
+  description: "Biryani, grills, seafood, pasta, pizza and desserts — the full Ai Restaurant menu, priced in Taka.",
 };
 
 export default function MenuPage() {

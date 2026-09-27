@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SearchX, X } from "lucide-react";
-import { DISHES, MENU, MENU_CATEGORIES, type DietaryTag, type MenuCategory } from "@/data/restaurant";
+import { DISHES, MENU, MENU_CATEGORIES, formatPrice, type DietaryTag, type MenuCategory } from "@/data/restaurant";
 import PlateFallback from "../PlateFallback";
 import SafeImage from "../SafeImage";
 
@@ -149,7 +149,7 @@ export default function MenuBrowser() {
                           fallback={<PlateFallback accent={accentFor(item.id)} label={item.name} />}
                         />
                         <span className="absolute right-4 top-4 rounded-full border border-line bg-ink/80 px-3 py-1 font-display text-lg text-gold-light backdrop-blur">
-                          ${item.price}
+                          {formatPrice(item.price)}
                         </span>
                       </div>
                       <div className="p-6">
@@ -169,7 +169,7 @@ export default function MenuBrowser() {
                       <div className="flex items-baseline gap-3">
                         <h3 className="font-display text-xl">{item.name}</h3>
                         <span className="flex-1 translate-y-[-4px] border-b border-dotted border-gold/25" />
-                        <span className="font-display text-xl text-gold-light">${item.price}</span>
+                        <span className="font-display text-xl text-gold-light">{formatPrice(item.price)}</span>
                       </div>
                       <p className="mt-1 text-sm text-cream/55">{item.description}</p>
                       <TagList tags={item.tags} />

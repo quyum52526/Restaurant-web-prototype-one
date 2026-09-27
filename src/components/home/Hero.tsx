@@ -24,7 +24,7 @@ import {
   Timer,
   UtensilsCrossed,
 } from "lucide-react";
-import { DISHES, type Dish } from "@/data/restaurant";
+import { DISHES, formatPrice, type Dish } from "@/data/restaurant";
 import PlateFallback from "../PlateFallback";
 import SafeImage from "../SafeImage";
 
@@ -43,12 +43,32 @@ const AUTOPLAY_RETRY_MS = 250;
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
+/** Long names step down a size so every title fits in about three lines and the hero never jumps. */
+const titleSize = (name: string) =>
+  name.length > 26 ? "text-4xl sm:text-[2.75rem]" : name.length > 20 ? "text-[2.75rem] sm:text-5xl" : "text-5xl sm:text-6xl";
+
+/**
+ * Plate sizes are tuned so the active plate and its neighbours never touch.
+ * Neighbouring slot centres sit a chord of 2·r·sin(STEP/2) apart (0.618r for
+ * 10 plates); the plate box is 0.95r wide, so the radii below add up to
+ * 0.95r·(ACTIVE + NEIGHBOUR)/2 ≈ 0.59r, leaving a small visible gap.
+ */
+const ACTIVE_SCALE = 0.92;
+const NEIGHBOUR_SCALE = 0.32;
+/**
+ * The ring's centre sits this far (× r) below the stage's bottom edge. Smaller
+ * plates leave the lower ring empty, so sinking it trims dead space while the
+ * neighbours (lowest edge ≈ 0.66r above the centre) stay clear of the fade.
+ */
+const RING_DROP = 0.38;
+
 /** Where a plate sits relative to the active one decides how it looks. */
 function plateState(index: number, active: number) {
   const offset = mod(index - active, COUNT);
-  if (offset === 0) return { scale: 1.2, opacity: 1, zIndex: 3 };
-  if (offset === 1 || offset === COUNT - 1) return { scale: 0.55, opacity: 0.4, zIndex: 2 };
-  return { scale: 0.45, opacity: 0, zIndex: 1 };
+  if (offset === 0) return { scale: ACTIVE_SCALE, opacity: 1, zIndex: 3 };
+  if (offset === 1 || offset === COUNT - 1) return { scale: NEIGHBOUR_SCALE, opacity: 0.55, zIndex: 2 };
+  // Everything further round the ring waits out of sight.
+  return { scale: NEIGHBOUR_SCALE * 0.8, opacity: 0, zIndex: 1 };
 }
 
 export default function Hero() {
@@ -86,7 +106,7 @@ export default function Hero() {
     const stage = stageRef.current;
     if (!stage) return;
     const update = () => {
-      const radius = Math.min(stage.clientWidth / 2.05, 340);
+      const radius = Math.min(stage.clientWidth / 1.9, 380);
       stage.style.setProperty("--r", `${Math.round(radius)}px`);
     };
     update();
@@ -104,8 +124,8 @@ export default function Hero() {
       });
       gsap.fromTo(
         plateRefs.current[0],
-        { scale: 0.6, opacity: 0 },
-        { scale: 1.2, opacity: 1, duration: 1.1, ease: "back.out(1.5)" },
+        { scale: ACTIVE_SCALE * 0.5, opacity: 0 },
+        { scale: ACTIVE_SCALE, opacity: 1, duration: 1.1, ease: "back.out(1.2)" },
       );
       gsap.from(".orbit-ring", { scale: 0.85, opacity: 0, duration: 1.2, ease: "power3.out" });
     },
@@ -187,7 +207,7 @@ export default function Hero() {
           scale,
           opacity,
           duration: incoming ? duration + 0.15 : duration,
-          ease: incoming ? "back.out(1.4)" : "power2.inOut",
+          ease: incoming ? "back.out(1.1)" : "power2.inOut",
         },
         incoming ? 0.1 : 0,
       );
@@ -321,10 +341,10 @@ export default function Hero() {
           <h1
             key={dish.id}
             aria-label={dish.name}
-            className="mt-4 font-display text-5xl leading-[1.05] sm:text-6xl"
+            className={`mt-4 font-display leading-[1.05] ${titleSize(dish.name)}`}
           >
             {dish.name.split(" ").map((word, wi) => (
-              <span key={wi} aria-hidden className="mr-[0.25em] inline-block overflow-hidden pb-2 align-bottom">
+              <span key={wi} aria-hidden className="mr-[0.25em] inline-block overflow-hidden whitespace-nowrap pb-2 align-bottom">
                 {wi === 0 ? (
                   <span className="hero-char inline-block pr-1 font-script font-normal tracking-normal text-gold-light">
                     {word}
@@ -342,8 +362,8 @@ export default function Hero() {
           <p className="hero-fade mx-auto mt-3 max-w-sm font-script text-2xl text-cream/85 lg:mx-0">{dish.subtitle}</p>
           <div className="hero-fade mt-6 flex items-end justify-center gap-6 lg:justify-start">
             <p className="font-display text-5xl text-gold-light">
-              <span className="mr-1 align-top text-xl text-gold">$</span>
-              {dish.price}
+              <span className="mr-1 align-top text-3xl text-gold">৳</span>
+              {dish.price.toLocaleString("en-US")}
             </p>
             <p className="flex items-center gap-1.5 pb-2 text-sm text-cream/60">
               <Timer size={15} className="text-gold" /> {dish.prepTime} min
@@ -359,13 +379,13 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Orbit stage: the ring's centre sits on the stage's bottom edge, so the
-            upper half of the orbit is visible and the lower half is clipped. */}
+        {/* Orbit stage: the ring's centre sits just below the stage's bottom edge,
+            so only the upper arc of the orbit is visible and the rest is clipped. */}
         <div
           ref={stageRef}
           onPointerEnter={pauseOnHover}
           className="relative order-1 w-full lg:order-2"
-          style={{ "--r": "240px", height: "calc(var(--r) * 1.68)" } as CSSProperties}
+          style={{ "--r": "240px", height: `calc(var(--r) * ${1.68 - RING_DROP})` } as CSSProperties}
         >
           <div
             className="pointer-events-none absolute -inset-x-[50vw] -top-[50vh] bottom-0 overflow-hidden"
@@ -378,10 +398,10 @@ export default function Hero() {
             {/* Spotlight behind the active plate */}
             <div
               className="absolute left-1/2 h-[calc(var(--r)*1.3)] w-[calc(var(--r)*1.3)] -translate-x-1/2 translate-y-1/2 rounded-full bg-gold/15 blur-3xl"
-              style={{ bottom: "var(--r)" }}
+              style={{ bottom: `calc(var(--r) * ${1 - RING_DROP})` }}
               aria-hidden
             />
-            <div ref={orbitRef} className="absolute bottom-0 left-1/2 h-0 w-0">
+            <div ref={orbitRef} className="absolute left-1/2 h-0 w-0" style={{ bottom: `calc(var(--r) * ${-RING_DROP})` }}>
               <div
                 className="orbit-ring absolute left-[calc(var(--r)*-1)] top-[calc(var(--r)*-1)] h-[calc(var(--r)*2)] w-[calc(var(--r)*2)] rounded-full border border-dashed border-cream/20"
                 aria-hidden
@@ -422,7 +442,7 @@ export default function Hero() {
                         }}
                         className="h-full w-full"
                       >
-                        <OrbitPlate dish={d} active={i === active} priority={i < 2} onSelect={() => goTo(i)} />
+                        <OrbitPlate dish={d} active={i === active} priority={i < 2 || i === COUNT - 1} onSelect={() => goTo(i)} />
                       </div>
                     </div>
                   </div>
@@ -553,7 +573,7 @@ export default function Hero() {
                   <span className={`block whitespace-nowrap text-xs font-medium ${i === active ? "text-cream" : "text-cream/60"}`}>
                     {d.name}
                   </span>
-                  <span className="block text-[11px] font-semibold text-gold-light">${d.price}</span>
+                  <span className="block text-[11px] font-semibold text-gold-light">{formatPrice(d.price)}</span>
                 </span>
               </button>
             ))}
