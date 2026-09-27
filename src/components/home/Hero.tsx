@@ -14,7 +14,7 @@ import {
   Timer,
   UtensilsCrossed,
 } from "lucide-react";
-import { DISHES } from "@/data/restaurant";
+import { DISHES, type Dish } from "@/data/restaurant";
 import PlateFallback from "../PlateFallback";
 import SafeImage from "../SafeImage";
 
@@ -22,58 +22,92 @@ gsap.registerPlugin(useGSAP);
 
 type Tab = "overview" | "ingredients";
 
+const COUNT = DISHES.length;
+/** Degrees between neighbouring plates on the 360° orbit. */
+const STEP = 360 / COUNT;
+const ORBIT_DURATION = 0.7;
+
+const mod = (n: number, m: number) => ((n % m) + m) % m;
+
+/** Where a plate sits relative to the active one decides how it looks. */
+function plateState(index: number, active: number) {
+  const offset = mod(index - active, COUNT);
+  if (offset === 0) return { scale: 1.2, opacity: 1, zIndex: 3 };
+  if (offset === 1 || offset === COUNT - 1) return { scale: 0.55, opacity: 0.4, zIndex: 2 };
+  return { scale: 0.45, opacity: 0, zIndex: 1 };
+}
+
 export default function Hero() {
   const [active, setActive] = useState(0);
   const [tab, setTab] = useState<Tab>("overview");
   const rootRef = useRef<HTMLElement>(null);
-  const floatRef = useRef<HTMLDivElement>(null);
-  const plateRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const plateRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const floatRefs = useRef<(HTMLDivElement | null)[]>([]);
   const railRef = useRef<HTMLDivElement>(null);
+  const floatTween = useRef<gsap.core.Tween | null>(null);
   const animating = useRef(false);
+  /** Cumulative orbit position, so the ring always turns the short way round. */
+  const position = useRef(0);
 
   const dish = DISHES[active];
 
+  // Size the orbit to the stage: its radius drives every plate position via --r.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const update = () => {
+      const radius = Math.min(stage.clientWidth / 2.05, 340);
+      stage.style.setProperty("--r", `${Math.round(radius)}px`);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
   const { contextSafe } = useGSAP(
     () => {
-      // Continuous idle float for the plate.
-      gsap.to(floatRef.current, {
+      // Place every plate upright at its resting state, then play the intro.
+      plateRefs.current.forEach((plate, i) => {
+        const { scale, opacity } = plateState(i, 0);
+        gsap.set(plate, { rotation: -i * STEP, scale, opacity });
+      });
+      gsap.fromTo(
+        plateRefs.current[0],
+        { scale: 0.6, opacity: 0 },
+        { scale: 1.2, opacity: 1, duration: 1.1, ease: "back.out(1.5)" },
+      );
+      gsap.from(".orbit-ring", { scale: 0.85, opacity: 0, duration: 1.2, ease: "power3.out" });
+    },
+    { scope: rootRef },
+  );
+
+  // Text + card enter animation and the active plate's idle float.
+  useGSAP(
+    () => {
+      floatTween.current?.kill();
+      floatRefs.current.forEach((el, i) => {
+        if (i !== active) gsap.to(el, { y: 0, duration: 0.4, ease: "power2.out" });
+      });
+      floatTween.current = gsap.to(floatRefs.current[active], {
         y: -10,
         duration: 2.2,
         ease: "sine.inOut",
         yoyo: true,
         repeat: -1,
       });
-      gsap.to(".plate-ring", { rotate: 360, duration: 60, ease: "none", repeat: -1 });
-    },
-    { scope: rootRef },
-  );
 
-  // Enter animation for the active dish (doubles as the intro on mount).
-  useGSAP(
-    () => {
       gsap
-        .timeline({
-          defaults: { ease: "power3.out" },
-          onComplete: () => {
-            animating.current = false;
-          },
-        })
-        .fromTo(
-          plateRef.current,
-          { rotate: -45, scale: 0.6, opacity: 0 },
-          { rotate: 0, scale: 1, opacity: 1, duration: 1.1, ease: "back.out(1.5)" },
-        )
-        .fromTo(
-          ".hero-char",
-          { yPercent: 110 },
-          { yPercent: 0, duration: 0.7, stagger: 0.018 },
-          0.05,
-        )
+        .timeline({ defaults: { ease: "power3.out" } })
+        .fromTo(".hero-char", { yPercent: 110 }, { yPercent: 0, duration: 0.65, stagger: 0.016 })
         .fromTo(
           ".hero-fade",
           { y: 18, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.06 },
-          0.2,
+          { y: 0, opacity: 1, duration: 0.55, stagger: 0.05 },
+          0.1,
         );
     },
     { scope: rootRef, dependencies: [active] },
@@ -87,28 +121,61 @@ export default function Hero() {
     { scope: rootRef, dependencies: [tab], revertOnUpdate: true },
   );
 
-  const goTo = contextSafe((index: number) => {
-    const next = (index + DISHES.length) % DISHES.length;
-    if (animating.current || next === active) return;
+  const goTo = contextSafe((target: number) => {
+    const next = mod(target, COUNT);
+    // Shortest signed distance round the ring, e.g. 5 → 0 is +1, not -5.
+    const delta = mod(next - active + COUNT / 2, COUNT) - COUNT / 2;
+    if (animating.current || delta === 0) return;
     animating.current = true;
+
+    position.current += delta;
+    const rotation = -position.current * STEP;
+    const duration = ORBIT_DURATION + (Math.abs(delta) - 1) * 0.15;
+
+    slotRefs.current.forEach((slot, i) => {
+      if (slot) slot.style.zIndex = String(plateState(i, next).zIndex);
+    });
 
     gsap.to(rootRef.current, {
       "--accent": DISHES[next].bgAccent,
-      duration: 1.2,
+      duration: 1.1,
       ease: "power2.inOut",
     });
 
-    gsap
-      .timeline({
-        defaults: { ease: "power2.in" },
-        onComplete: () => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        animating.current = false;
+      },
+    });
+
+    tl.to(orbitRef.current, { rotation, duration, ease: "power2.inOut" }, 0);
+
+    plateRefs.current.forEach((plate, i) => {
+      const { scale, opacity } = plateState(i, next);
+      const incoming = i === next;
+      // Counter-rotate so every plate stays upright while the ring turns.
+      tl.to(plate, { rotation: -i * STEP - rotation, duration, ease: "power2.inOut" }, 0).to(
+        plate,
+        {
+          scale,
+          opacity,
+          duration: incoming ? duration + 0.15 : duration,
+          ease: incoming ? "back.out(1.4)" : "power2.inOut",
+        },
+        incoming ? 0.1 : 0,
+      );
+    });
+
+    tl.to(".hero-char", { yPercent: -110, duration: 0.3, stagger: 0.006, ease: "power2.in" }, 0)
+      .to(".hero-fade", { y: -12, opacity: 0, duration: 0.25, stagger: 0.025, ease: "power2.in" }, 0)
+      .call(
+        () => {
           setTab("overview");
           setActive(next);
         },
-      })
-      .to(plateRef.current, { rotate: 45, scale: 0.7, opacity: 0, duration: 0.45 })
-      .to(".hero-char", { yPercent: -110, duration: 0.35, stagger: 0.008 }, 0)
-      .to(".hero-fade", { y: -12, opacity: 0, duration: 0.3, stagger: 0.03 }, 0);
+        [],
+        0.32,
+      );
   });
 
   const next = useCallback(() => goTo(active + 1), [active, goTo]);
@@ -153,16 +220,16 @@ export default function Hero() {
         <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#f3ece0_1px,transparent_1px)] [background-size:28px_28px]" />
       </div>
 
-      <div className="container-lux relative grid flex-1 items-center gap-10 lg:grid-cols-[1fr_minmax(0,1.1fr)_1fr] lg:gap-6">
+      <div className="container-lux relative grid flex-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-6">
         {/* Copy */}
-        <div className="order-2 text-center lg:order-1 lg:text-left">
+        <div className="relative z-10 order-2 text-center lg:order-1 lg:text-left">
           <p className="hero-fade eyebrow">
             {dish.category} · No. {String(active + 1).padStart(2, "0")}
           </p>
           <h1
             key={dish.id}
             aria-label={dish.name}
-            className="mt-4 font-serif text-5xl leading-[1.02] sm:text-6xl xl:text-7xl"
+            className="mt-4 font-serif text-5xl leading-[1.02] sm:text-6xl"
           >
             {dish.name.split(" ").map((word, wi) => (
               <span key={wi} aria-hidden className="mr-[0.25em] inline-block overflow-hidden pb-2 align-bottom">
@@ -194,37 +261,84 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Plate */}
-        <div className="relative order-1 flex justify-center lg:order-2">
+        {/* Orbit stage: the ring's centre sits on the stage's bottom edge, so the
+            upper half of the orbit is visible and the lower half is clipped. */}
+        <div
+          ref={stageRef}
+          className="relative order-1 w-full lg:order-2"
+          style={{ "--r": "240px", height: "calc(var(--r) * 1.68)" } as CSSProperties}
+        >
           <div
-            className="plate-ring pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(92vw,540px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-cream/15"
-            aria-hidden
-          />
-          <div ref={floatRef} className="relative">
+            className="pointer-events-none absolute -inset-x-[50vw] -top-[50vh] bottom-0 overflow-hidden"
+            // Feather the clip line so plates dissolve into the horizon instead of being sliced.
+            style={{
+              maskImage: "linear-gradient(to bottom, #000 calc(100% - var(--r) * 0.22), transparent)",
+              WebkitMaskImage: "linear-gradient(to bottom, #000 calc(100% - var(--r) * 0.22), transparent)",
+            }}
+          >
+            {/* Spotlight behind the active plate */}
             <div
-              ref={plateRef}
-              className="relative aspect-square w-[min(72vw,440px)] overflow-hidden rounded-full bg-panel shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8),0_0_0_10px_rgba(243,236,224,0.06),0_0_0_22px_rgba(243,236,224,0.03)] will-change-transform"
-            >
-              <SafeImage
-                key={dish.id}
-                src={dish.image}
-                alt={`Top view of ${dish.name}`}
-                fill
-                priority={active === 0}
-                sizes="(max-width: 1024px) 72vw, 440px"
-                className="object-cover"
-                fallback={<PlateFallback accent={dish.bgAccent} label={`Illustration of ${dish.name}`} />}
+              className="absolute left-1/2 h-[calc(var(--r)*1.3)] w-[calc(var(--r)*1.3)] -translate-x-1/2 translate-y-1/2 rounded-full bg-accent/50 blur-3xl"
+              style={{ bottom: "var(--r)" }}
+              aria-hidden
+            />
+            <div ref={orbitRef} className="absolute bottom-0 left-1/2 h-0 w-0">
+              <div
+                className="orbit-ring absolute left-[calc(var(--r)*-1)] top-[calc(var(--r)*-1)] h-[calc(var(--r)*2)] w-[calc(var(--r)*2)] rounded-full border border-dashed border-cream/20"
+                aria-hidden
               />
+              <div
+                className="orbit-ring absolute left-[calc(var(--r)*-1.28)] top-[calc(var(--r)*-1.28)] h-[calc(var(--r)*2.56)] w-[calc(var(--r)*2.56)] rounded-full border border-cream/[0.06]"
+                aria-hidden
+              />
+              {DISHES.map((d, i) => {
+                const initial = plateState(i, 0);
+                return (
+                  <div
+                    key={d.id}
+                    ref={(el) => {
+                      slotRefs.current[i] = el;
+                    }}
+                    className="absolute left-0 top-0"
+                    style={{
+                      transform: `rotate(${i * STEP}deg) translateY(calc(var(--r) * -1))`,
+                      zIndex: initial.zIndex,
+                    }}
+                  >
+                    <div
+                      ref={(el) => {
+                        plateRefs.current[i] = el;
+                      }}
+                      className="absolute h-[calc(var(--r)*0.95)] w-[calc(var(--r)*0.95)] will-change-transform"
+                      style={{
+                        marginLeft: "calc(var(--r) * -0.475)",
+                        marginTop: "calc(var(--r) * -0.475)",
+                        transform: `rotate(${-i * STEP}deg) scale(${initial.scale})`,
+                        opacity: initial.opacity,
+                      }}
+                    >
+                      <div
+                        ref={(el) => {
+                          floatRefs.current[i] = el;
+                        }}
+                        className="h-full w-full"
+                      >
+                        <OrbitPlate dish={d} active={i === active} priority={i < 2} onSelect={() => goTo(i)} />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
 
         {/* Glass card */}
-        <aside className="order-3 mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
+        <aside className="relative z-10 order-3 mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
           <div className="glass rounded-3xl p-6 shadow-2xl">
-            <div className="hero-fade flex items-center justify-between">
+            <div className="hero-fade flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gold text-ink">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gold text-ink">
                   <span className="font-serif text-xl font-semibold">{dish.rating.toFixed(1)}</span>
                 </span>
                 <div>
@@ -304,7 +418,7 @@ export default function Hero() {
       </div>
 
       {/* Plate carousel */}
-      <div className="container-lux relative mt-10">
+      <div className="container-lux relative z-10 mt-10">
         <div className="glass flex items-center gap-2 rounded-full p-2">
           <button type="button" onClick={prev} aria-label="Previous dish" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-cream/20 transition hover:border-gold hover:text-gold">
             <ChevronLeft size={18} />
@@ -348,5 +462,47 @@ export default function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * A photo presented as an isolated round plate: a porcelain rim with the image
+ * cropped to a circle inside it, so rectangular photo edges never show.
+ */
+function OrbitPlate({
+  dish,
+  active,
+  priority,
+  onSelect,
+}: {
+  dish: Dish;
+  active: boolean;
+  priority: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      tabIndex={-1}
+      aria-hidden
+      onClick={onSelect}
+      className={`pointer-events-auto relative block h-full w-full rounded-full bg-[radial-gradient(circle_at_35%_30%,#fbf8f2,#d6cebf)] p-[5%] transition-shadow duration-500 ${
+        active
+          ? "cursor-default shadow-[0_40px_70px_-20px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.12)]"
+          : "cursor-pointer shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)]"
+      }`}
+    >
+      <span className="relative block h-full w-full overflow-hidden rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)]">
+        <SafeImage
+          src={dish.image}
+          alt=""
+          fill
+          priority={priority}
+          sizes="(max-width: 1024px) 50vw, 360px"
+          className="rounded-full object-cover"
+          fallback={<PlateFallback accent={dish.bgAccent} label={dish.name} />}
+        />
+      </span>
+    </button>
   );
 }
