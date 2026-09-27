@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Camera, Clock, Mail, MapPin, Phone } from "lucide-react";
-import { HOURS, INSTAGRAM, NAV_LINKS, RESTAURANT } from "@/data/restaurant";
+import { Camera, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { CONTACT_LINKS, HOURS, INSTAGRAM, NAV_LINKS, RESTAURANT } from "@/data/restaurant";
 import Logo from "./Logo";
 import NewsletterForm from "./NewsletterForm";
 import SafeImage from "./SafeImage";
@@ -39,18 +39,25 @@ export default function Footer() {
           </h3>
           <address className="mt-5 space-y-3 text-sm not-italic text-cream/70">
             <p>
-              {RESTAURANT.address.line1}
-              <br />
-              {RESTAURANT.address.line2}
+              <a href={CONTACT_LINKS.maps} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
+                {RESTAURANT.address.line1}
+                <br />
+                {RESTAURANT.address.line2}
+              </a>
             </p>
             <p>
-              <a href={`tel:${RESTAURANT.phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2 hover:text-gold">
+              <a href={CONTACT_LINKS.tel} className="flex items-center gap-2 hover:text-gold">
                 <Phone size={14} /> {RESTAURANT.phone}
               </a>
             </p>
             <p>
-              <a href={`mailto:${RESTAURANT.email}`} className="flex items-center gap-2 hover:text-gold">
-                <Mail size={14} /> {RESTAURANT.email}
+              <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gold">
+                <MessageCircle size={14} /> WhatsApp us
+              </a>
+            </p>
+            <p>
+              <a href={CONTACT_LINKS.mailto} className="flex items-center gap-2 break-all hover:text-gold">
+                <Mail size={14} className="shrink-0" /> {RESTAURANT.email}
               </a>
             </p>
           </address>

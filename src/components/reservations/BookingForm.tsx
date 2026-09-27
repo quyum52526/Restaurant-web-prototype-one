@@ -13,7 +13,7 @@ import {
   Users,
   UtensilsCrossed,
 } from "lucide-react";
-import { OCCASIONS, RESTAURANT, SEATING_OPTIONS, TIME_SLOTS } from "@/data/restaurant";
+import { CONTACT_LINKS, OCCASIONS, RESTAURANT, SEATING_OPTIONS, TIME_SLOTS } from "@/data/restaurant";
 import {
   MAX_GUESTS,
   formatDate,
@@ -200,7 +200,12 @@ export default function BookingForm() {
                   <Plus size={16} />
                 </button>
               </div>
-              <p className="mt-2 text-xs text-cream/45">Larger party? Call {RESTAURANT.phone}.</p>
+              <p className="mt-2 text-xs text-cream/45">
+                Larger party? Call{" "}
+                <a href={CONTACT_LINKS.tel} className="text-gold hover:underline">{RESTAURANT.phone}</a>{" "}
+                or{" "}
+                <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">WhatsApp us</a>.
+              </p>
             </div>
           </div>
         </Step>
@@ -286,7 +291,7 @@ export default function BookingForm() {
             </div>
             <div>
               <label htmlFor="field-phone" className="field-label">Phone</label>
-              <input id="field-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" aria-invalid={!!errors.phone} className="field" placeholder="+1 555 000 0000" />
+              <input id="field-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" aria-invalid={!!errors.phone} className="field" placeholder="+880 1XXX-XXXXXX" />
               <FieldError msg={errors.phone} />
             </div>
             <div>

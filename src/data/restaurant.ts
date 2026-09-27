@@ -1,9 +1,9 @@
 /**
  * Single source of truth for restaurant content.
  *
- * Everything here is demo content for the prototype: the restaurant name,
- * address, prices, ratings, reviews and chef bios are placeholders to be
- * replaced with the client's real data. Images are Unsplash CDN URLs; every
+ * The contact details in RESTAURANT (address, phone/WhatsApp, email) are the
+ * official ones. Everything else here (prices, ratings, reviews, chef bios)
+ * is still demo content for the prototype, to be replaced with real data. Images are Unsplash CDN URLs; every
  * image is rendered through <SafeImage>, which falls back to an inline
  * illustration if a URL ever fails to load.
  */
@@ -49,14 +49,23 @@ export const RESTAURANT = {
   tagline: "Fire, Field & Sea",
   logo: "/logo.png",
   favicon: "/favicon.png",
-  phone: "+1 (555) 014-2290",
-  email: "hello@ai-restaurant.example",
+  /** Also the WhatsApp number. */
+  phone: "+8801962434901",
+  email: "quyum52526@gmail.com",
   address: {
-    line1: "128 Harbour Lane",
-    line2: "Old Town, Riverside 10021",
+    line1: "East Nasirabad",
+    line2: "Chittagong, Bangladesh",
   },
-  mapsQuery: "128 Harbour Lane Old Town",
+  mapsQuery: "East Nasirabad, Chittagong, Bangladesh",
   instagram: "@ai.restaurant",
+};
+
+/** Ready-made contact links, so every page dials and messages the same number. */
+export const CONTACT_LINKS = {
+  tel: `tel:${RESTAURANT.phone}`,
+  whatsapp: `https://wa.me/${RESTAURANT.phone.replace(/\D/g, "")}`,
+  mailto: `mailto:${RESTAURANT.email}`,
+  maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(RESTAURANT.mapsQuery)}`,
 };
 
 export const HOURS = [

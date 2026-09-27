@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Navigation, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import InquiryForm from "@/components/contact/InquiryForm";
-import { HOURS, RESTAURANT } from "@/data/restaurant";
+import { CONTACT_LINKS, HOURS, RESTAURANT } from "@/data/restaurant";
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Opening hours, directions and how to reach the Ai Restaurant team.",
 };
 
-const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(RESTAURANT.mapsQuery)}`;
+const mapsUrl = CONTACT_LINKS.maps;
 
 export default function ContactPage() {
   return (
@@ -20,11 +20,12 @@ export default function ContactPage() {
         intro="Questions, private dining, or just want to say hello — reach out and our team will get back to you within a day."
       />
 
-      <section className="container-lux grid gap-6 py-20 md:grid-cols-3">
+      <section className="container-lux grid gap-6 py-20 md:grid-cols-2 xl:grid-cols-4">
         {[
           { icon: MapPin, title: "Address", lines: [RESTAURANT.address.line1, RESTAURANT.address.line2], href: mapsUrl, cta: "Get directions" },
-          { icon: Phone, title: "Phone", lines: [RESTAURANT.phone, "Daily from 11:00 AM"], href: `tel:${RESTAURANT.phone.replace(/[^\d+]/g, "")}`, cta: "Call us" },
-          { icon: Mail, title: "Email", lines: [RESTAURANT.email, "Replies within one day"], href: `mailto:${RESTAURANT.email}`, cta: "Write to us" },
+          { icon: Phone, title: "Phone", lines: [RESTAURANT.phone, "Daily from 11:00 AM"], href: CONTACT_LINKS.tel, cta: "Call us" },
+          { icon: MessageCircle, title: "WhatsApp", lines: [RESTAURANT.phone, "Tap to start a chat"], href: CONTACT_LINKS.whatsapp, cta: "Message on WhatsApp" },
+          { icon: Mail, title: "Email", lines: [RESTAURANT.email, "Replies within one day"], href: CONTACT_LINKS.mailto, cta: "Write to us" },
         ].map(({ icon: Icon, title, lines, href, cta }) => (
           <article key={title} className="glass flex flex-col rounded-3xl p-8">
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold/15 text-gold">
