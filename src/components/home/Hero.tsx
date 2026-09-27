@@ -621,8 +621,9 @@ export default function Hero() {
 }
 
 /**
- * A photo presented as an isolated round plate: a porcelain rim with the image
- * cropped to a circle inside it, so rectangular photo edges never show.
+ * The dish photos are transparent cut-outs that already include their own
+ * bowl, plate or pan, so they are shown whole (never cropped) with a soft
+ * drop shadow that grounds them on the dark stage.
  */
 function OrbitPlate({
   dish,
@@ -641,23 +642,21 @@ function OrbitPlate({
       tabIndex={-1}
       aria-hidden
       onClick={onSelect}
-      className={`pointer-events-auto relative block h-full w-full rounded-full bg-[radial-gradient(circle_at_35%_30%,#fbf8f2,#d6cebf)] p-[5%] transition-shadow duration-500 ${
+      className={`pointer-events-auto relative block h-full w-full rounded-full transition-[filter] duration-500 ${
         active
-          ? "cursor-default shadow-[0_40px_70px_-20px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.12)]"
-          : "cursor-pointer shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)]"
+          ? "cursor-default [filter:drop-shadow(0_28px_32px_rgba(0,0,0,0.75))]"
+          : "cursor-pointer [filter:drop-shadow(0_12px_16px_rgba(0,0,0,0.7))]"
       }`}
     >
-      <span className="relative block h-full w-full overflow-hidden rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)]">
-        <SafeImage
-          src={dish.image}
-          alt=""
-          fill
-          priority={priority}
-          sizes="(max-width: 1024px) 50vw, 360px"
-          className="rounded-full object-cover"
-          fallback={<PlateFallback accent={dish.bgAccent} label={dish.name} />}
-        />
-      </span>
+      <SafeImage
+        src={dish.image}
+        alt=""
+        fill
+        priority={priority}
+        sizes="(max-width: 1024px) 60vw, 380px"
+        className="object-contain"
+        fallback={<PlateFallback accent={dish.bgAccent} label={dish.name} />}
+      />
     </button>
   );
 }

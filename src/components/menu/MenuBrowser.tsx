@@ -139,13 +139,13 @@ export default function MenuBrowser() {
                 <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {featured.map((item) => (
                     <article key={item.id} className="group glass overflow-hidden rounded-3xl">
-                      <div className="relative aspect-[4/3] overflow-hidden">
+                      <div className="relative aspect-[4/3] overflow-hidden bg-[radial-gradient(circle_at_50%_55%,rgba(245,158,11,0.12),transparent_65%)]">
                         <SafeImage
                           src={item.image as string}
                           alt={item.name}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover transition duration-700 group-hover:scale-105"
+                          className="object-contain p-5 transition duration-700 [filter:drop-shadow(0_18px_22px_rgba(0,0,0,0.6))] group-hover:scale-105"
                           fallback={<PlateFallback accent={accentFor(item.id)} label={item.name} />}
                         />
                         <span className="absolute right-4 top-4 rounded-full border border-line bg-ink/80 px-3 py-1 font-display text-lg text-gold-light backdrop-blur">

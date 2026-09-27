@@ -30,14 +30,17 @@ export default function CategoryBento() {
             <Reveal key={cat.title} delay={i * 0.08} className={LAYOUT[i]}>
               <Link
                 href={cat.href}
-                className="group relative flex h-full flex-col justify-end overflow-hidden rounded-[1.75rem] border border-line p-7"
+                className="group relative flex h-full flex-col justify-end overflow-hidden rounded-[1.75rem] border border-line bg-[radial-gradient(circle_at_75%_45%,rgba(245,158,11,0.14),transparent_60%)] bg-panel p-7"
               >
                 <SafeImage
                   src={cat.image}
                   alt={`${cat.title} at Ai Restaurant`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover transition duration-700 group-hover:scale-105"
+                  className={`object-contain p-5 transition duration-700 [filter:drop-shadow(0_20px_24px_rgba(0,0,0,0.6))] group-hover:scale-105 ${
+                    // The tall tile lifts the dish above its text; the short ones sit it to the right.
+                    i === 1 ? "object-right md:object-top md:pb-40" : "object-right"
+                  }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
                 <span className="absolute right-6 top-6 grid h-11 w-11 place-items-center rounded-full border border-cream/30 bg-ink/30 backdrop-blur transition group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
