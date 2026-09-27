@@ -1,21 +1,29 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import "@fontsource-variable/playfair-display/wght.css";
+import "@fontsource-variable/playfair-display/wght-italic.css";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { RESTAURANT } from "@/data/restaurant";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
-  title: "Sip Studio — Beverage Showcase",
-  description: "Animated beverage showcase hero built with Next.js, Tailwind and GSAP.",
+  title: {
+    default: `${RESTAURANT.name} — ${RESTAURANT.tagline}`,
+    template: `%s · ${RESTAURANT.name}`,
+  },
+  description:
+    "A luxury live-fire restaurant serving dry-aged steaks, day-boat seafood and seasonal plates. Explore the menu and reserve your table.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0a09",
 };
 
 export default function RootLayout({
@@ -25,10 +33,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={geistSans.variable}>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-gold focus:px-4 focus:py-2 focus:text-ink"
+        >
+          Skip to content
+        </a>
+        <Navbar />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );
