@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FocusEvent,
+  type PointerEvent,
+} from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
@@ -9,6 +17,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Flame,
+  Pause,
+  Play,
   ShoppingBag,
   Star,
   Timer,
@@ -26,6 +36,10 @@ const COUNT = DISHES.length;
 /** Degrees between neighbouring plates on the 360° orbit. */
 const STEP = 360 / COUNT;
 const ORBIT_DURATION = 0.7;
+/** Time each dish stays centre stage before the orbit auto-advances. */
+const AUTOPLAY_MS = 4500;
+/** If a tick lands mid-transition, retry shortly instead of skipping a beat. */
+const AUTOPLAY_RETRY_MS = 250;
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
@@ -51,6 +65,19 @@ export default function Hero() {
   const animating = useRef(false);
   /** Cumulative orbit position, so the ring always turns the short way round. */
   const position = useRef(0);
+
+  // Autoplay: runs only while nothing below asks it to hold.
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const [pageHidden, setPageHidden] = useState(false);
+  const [inView, setInView] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  /** Bumped each time a fresh countdown starts; restarts the progress ring. */
+  const [cycle, setCycle] = useState(0);
+  const autoplayTimer = useRef<number | null>(null);
+  const autoAdvance = useRef<() => void>(() => {});
+  const autoplaying = !hovered && !focused && !userPaused && !pageHidden && inView && !reducedMotion;
 
   const dish = DISHES[active];
 
@@ -180,6 +207,68 @@ export default function Hero() {
 
   const next = useCallback(() => goTo(active + 1), [active, goTo]);
   const prev = useCallback(() => goTo(active - 1), [active, goTo]);
+  // The timer outlives renders, so it always calls the latest `next`.
+  autoAdvance.current = next;
+
+  // One countdown per dish. Because it restarts whenever `active` changes,
+  // manual navigation (arrows, thumbnails, plates, keys) resets it too, so an
+  // auto tick can never fire right on top of a user's click.
+  useEffect(() => {
+    if (!autoplaying) return;
+    setCycle((c) => c + 1);
+    const tick = () => {
+      if (animating.current) {
+        autoplayTimer.current = window.setTimeout(tick, AUTOPLAY_RETRY_MS);
+        return;
+      }
+      autoAdvance.current();
+    };
+    autoplayTimer.current = window.setTimeout(tick, AUTOPLAY_MS);
+    return () => {
+      if (autoplayTimer.current !== null) window.clearTimeout(autoplayTimer.current);
+      autoplayTimer.current = null;
+    };
+  }, [active, autoplaying]);
+
+  // Hold while the tab is in the background, so no transitions queue up.
+  useEffect(() => {
+    const onVisibility = () => setPageHidden(document.hidden);
+    onVisibility();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  // Hold while the hero is scrolled out of view.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
+      threshold: 0.2,
+    });
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
+  // Respect users who ask the OS for less motion.
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReducedMotion(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  const pauseOnHover = (e: PointerEvent) => {
+    if (e.pointerType === "mouse") setHovered(true);
+  };
+
+  // Keyboard users get time to read too; mouse clicks (no focus ring) don't pause.
+  const onFocusIn = (e: FocusEvent<HTMLElement>) => {
+    if (e.target.matches(":focus-visible")) setFocused(true);
+  };
+  const onFocusOut = (e: FocusEvent<HTMLElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+  };
 
   // Keep the active thumbnail visible inside the rail without scrolling the page.
   useEffect(() => {
@@ -212,6 +301,9 @@ export default function Hero() {
       aria-label="Signature dishes"
       className="relative flex min-h-[100svh] flex-col overflow-hidden pb-6 pt-28 lg:pt-32"
       style={{ "--accent": DISHES[0].bgAccent } as CSSProperties}
+      onPointerLeave={() => setHovered(false)}
+      onFocus={onFocusIn}
+      onBlur={onFocusOut}
     >
       {/* Backdrop */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -265,6 +357,7 @@ export default function Hero() {
             upper half of the orbit is visible and the lower half is clipped. */}
         <div
           ref={stageRef}
+          onPointerEnter={pauseOnHover}
           className="relative order-1 w-full lg:order-2"
           style={{ "--r": "240px", height: "calc(var(--r) * 1.68)" } as CSSProperties}
         >
@@ -334,7 +427,10 @@ export default function Hero() {
         </div>
 
         {/* Glass card */}
-        <aside className="relative z-10 order-3 mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
+        <aside
+          onPointerEnter={pauseOnHover}
+          className="relative z-10 order-3 mx-auto w-full max-w-md lg:ml-auto lg:mr-0"
+        >
           <div className="glass rounded-3xl p-6 shadow-2xl">
             <div className="hero-fade flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -459,6 +555,39 @@ export default function Hero() {
           <button type="button" onClick={next} aria-label="Next dish" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold text-ink transition hover:bg-gold-light">
             <ChevronRight size={18} />
           </button>
+          {!reducedMotion && (
+            <button
+              type="button"
+              onClick={() => setUserPaused((p) => !p)}
+              aria-label={userPaused ? "Play slideshow" : "Pause slideshow"}
+              aria-pressed={userPaused}
+              className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full text-cream/80 transition hover:text-gold"
+            >
+              {/* Countdown ring: fills over one autoplay interval, freezes while held. */}
+              <svg viewBox="0 0 44 44" className="absolute inset-0 -rotate-90" aria-hidden>
+                <circle cx="22" cy="22" r="20" fill="none" stroke="currentColor" strokeOpacity="0.15" strokeWidth="2" />
+                <circle
+                  key={cycle}
+                  cx="22"
+                  cy="22"
+                  r="20"
+                  fill="none"
+                  pathLength={100}
+                  strokeDasharray="100"
+                  strokeDashoffset="100"
+                  strokeLinecap="round"
+                  className="text-gold"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  style={{
+                    animation: `hero-countdown ${AUTOPLAY_MS}ms linear forwards`,
+                    animationPlayState: autoplaying ? "running" : "paused",
+                  }}
+                />
+              </svg>
+              {userPaused ? <Play size={15} /> : <Pause size={15} />}
+            </button>
+          )}
         </div>
       </div>
     </section>
