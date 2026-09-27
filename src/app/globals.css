@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: #0f1a12;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
