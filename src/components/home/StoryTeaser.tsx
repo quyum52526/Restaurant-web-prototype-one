@@ -19,14 +19,14 @@ export default function StoryTeaser() {
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
         </div>
         <div className="glass absolute -bottom-8 right-4 max-w-[220px] rounded-2xl p-5 md:right-8">
-          <p className="font-serif text-4xl text-gold">Est. 2014</p>
+          <p className="font-display text-4xl text-gold">Est. 2014</p>
           <p className="mt-1 text-xs uppercase tracking-widest text-cream/60">One hearth, one vision</p>
         </div>
       </Reveal>
 
       <Reveal delay={0.1}>
         <p className="eyebrow">Our Story</p>
-        <h2 className="mt-5 text-balance font-serif text-4xl leading-tight md:text-6xl">
+        <h2 className="mt-5 text-balance font-display text-4xl leading-tight md:text-6xl">
           Where <em className="text-gold-light">fire</em> meets the finest of the field and sea.
         </h2>
         <p className="mt-6 text-base leading-relaxed text-cream/65">
@@ -39,7 +39,7 @@ export default function StoryTeaser() {
           {STATS.map((s) => (
             <div key={s.label}>
               <dt className="sr-only">{s.label}</dt>
-              <dd className="font-serif text-4xl text-cream">{s.value}</dd>
+              <dd className="font-display text-4xl text-cream">{s.value}</dd>
               <p className="mt-1 text-xs uppercase tracking-wider text-cream/50">{s.label}</p>
             </div>
           ))}

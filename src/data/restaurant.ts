@@ -90,7 +90,7 @@ export const DISHES: Dish[] = [
       "We rest every steak for exactly as long as it cooked. Ask for medium-rare — the marbling was made for it.",
     ingredients: ["Bone-in ribeye", "Bone-marrow butter", "Banana shallots", "Red-wine jus", "Flaky sea salt", "Thyme"],
     tags: ["Signature", "Gluten-Free"],
-    bgAccent: "#6e2a1c",
+    bgAccent: "#6b4423",
     image: unsplash("photo-1600891964092-4316c288032e"),
   },
   {
@@ -108,7 +108,7 @@ export const DISHES: Dish[] = [
       "The skin is the best part. We press it flat for the first minute so every millimetre crisps evenly.",
     ingredients: ["Atlantic salmon", "Cultured butter", "Dill & chives", "Tenderstem broccoli", "Meyer lemon", "Capers"],
     tags: ["Seafood", "Gluten-Free"],
-    bgAccent: "#a4552e",
+    bgAccent: "#8a5a1c",
     image: unsplash("photo-1467003909585-2f8a72700288"),
   },
   {
@@ -144,7 +144,7 @@ export const DISHES: Dish[] = [
       "Look for the leopard spots on the crust — that's the sign the oven and the dough agreed with each other.",
     ingredients: ["72-hour dough", "San Marzano tomato", "Fior di latte", "Fresh basil", "Extra-virgin olive oil", "Sea salt"],
     tags: ["Vegetarian"],
-    bgAccent: "#8f3420",
+    bgAccent: "#7a5220",
     image: unsplash("photo-1574071318508-1cdbab80d002"),
   },
   {

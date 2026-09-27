@@ -307,9 +307,9 @@ export default function Hero() {
     >
       {/* Backdrop */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--accent)_0%,transparent_65%)] opacity-60" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--accent)_0%,transparent_60%)] opacity-35" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
-        <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#f3ece0_1px,transparent_1px)] [background-size:28px_28px]" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:28px_28px]" />
       </div>
 
       <div className="container-lux relative grid flex-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-6">
@@ -321,21 +321,27 @@ export default function Hero() {
           <h1
             key={dish.id}
             aria-label={dish.name}
-            className="mt-4 font-serif text-5xl leading-[1.02] sm:text-6xl"
+            className="mt-4 font-display text-5xl leading-[1.05] sm:text-6xl"
           >
             {dish.name.split(" ").map((word, wi) => (
               <span key={wi} aria-hidden className="mr-[0.25em] inline-block overflow-hidden pb-2 align-bottom">
-                {word.split("").map((char, ci) => (
-                  <span key={ci} className={`hero-char inline-block ${wi === 0 ? "italic text-gold-light" : ""}`}>
-                    {char}
+                {wi === 0 ? (
+                  <span className="hero-char inline-block pr-1 font-script font-normal tracking-normal text-gold-light">
+                    {word}
                   </span>
-                ))}
+                ) : (
+                  word.split("").map((char, ci) => (
+                    <span key={ci} className="hero-char inline-block">
+                      {char}
+                    </span>
+                  ))
+                )}
               </span>
             ))}
           </h1>
-          <p className="hero-fade mx-auto mt-4 max-w-sm text-base text-cream/70 lg:mx-0">{dish.subtitle}</p>
+          <p className="hero-fade mx-auto mt-3 max-w-sm font-script text-2xl text-cream/85 lg:mx-0">{dish.subtitle}</p>
           <div className="hero-fade mt-6 flex items-end justify-center gap-6 lg:justify-start">
-            <p className="font-serif text-5xl">
+            <p className="font-display text-5xl text-gold-light">
               <span className="mr-1 align-top text-xl text-gold">$</span>
               {dish.price}
             </p>
@@ -371,7 +377,7 @@ export default function Hero() {
           >
             {/* Spotlight behind the active plate */}
             <div
-              className="absolute left-1/2 h-[calc(var(--r)*1.3)] w-[calc(var(--r)*1.3)] -translate-x-1/2 translate-y-1/2 rounded-full bg-accent/50 blur-3xl"
+              className="absolute left-1/2 h-[calc(var(--r)*1.3)] w-[calc(var(--r)*1.3)] -translate-x-1/2 translate-y-1/2 rounded-full bg-gold/15 blur-3xl"
               style={{ bottom: "var(--r)" }}
               aria-hidden
             />
@@ -431,16 +437,16 @@ export default function Hero() {
           onPointerEnter={pauseOnHover}
           className="relative z-10 order-3 mx-auto w-full max-w-md lg:ml-auto lg:mr-0"
         >
-          <div className="glass rounded-3xl p-6 shadow-2xl">
+          <div className="glass rounded-3xl p-6 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.9)]">
             <div className="hero-fade flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gold text-ink">
-                  <span className="font-serif text-xl font-semibold">{dish.rating.toFixed(1)}</span>
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-gold-light to-gold text-ink shadow-[0_8px_24px_-8px_rgba(245,158,11,0.6)]">
+                  <span className="font-display text-xl">{dish.rating.toFixed(1)}</span>
                 </span>
                 <div>
                   <div className="flex gap-0.5" aria-label={`${dish.rating} out of 5`}>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={13} className={i < Math.round(dish.rating) ? "fill-gold text-gold" : "text-cream/25"} />
+                      <Star key={i} size={13} className={i < Math.round(dish.rating) ? "fill-gold-light text-gold-light" : "text-cream/20"} />
                     ))}
                   </div>
                   <p className="mt-1 text-xs text-cream/55">Guest rating</p>
@@ -448,14 +454,14 @@ export default function Hero() {
               </div>
               <div className="flex flex-wrap justify-end gap-1">
                 {dish.tags.slice(0, 2).map((t) => (
-                  <span key={t} className="rounded-full border border-gold/30 px-2.5 py-1 text-[10px] uppercase tracking-wider text-gold">
+                  <span key={t} className="tag">
                     {t}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div role="tablist" aria-label="Dish details" className="hero-fade mt-6 grid grid-cols-2 rounded-full bg-ink/50 p-1">
+            <div role="tablist" aria-label="Dish details" className="hero-fade mt-6 grid grid-cols-2 rounded-full border border-line bg-ink/70 p-1">
               {(["overview", "ingredients"] as const).map((t) => (
                 <button
                   key={t}
@@ -466,7 +472,7 @@ export default function Hero() {
                   aria-controls="dish-panel"
                   onClick={() => setTab(t)}
                   className={`rounded-full py-2 text-sm capitalize transition ${
-                    tab === t ? "bg-cream text-ink" : "text-cream/60 hover:text-cream"
+                    tab === t ? "bg-gold font-semibold text-ink" : "text-cream/60 hover:text-gold-light"
                   }`}
                 >
                   {t}
@@ -485,7 +491,7 @@ export default function Hero() {
                         { icon: Timer, label: "Prep", value: `${dish.prepTime}m` },
                         { icon: UtensilsCrossed, label: "Course", value: dish.category },
                       ].map(({ icon: Icon, label, value }) => (
-                        <div key={label} className="rounded-2xl bg-ink/40 px-2 py-3">
+                        <div key={label} className="rounded-2xl border border-line bg-ink/60 px-2 py-3">
                           <Icon size={15} className="mx-auto text-gold" />
                           <dd className="mt-1.5 text-sm font-semibold">{value}</dd>
                           <dt className="text-[10px] uppercase tracking-wider text-cream/45">{label}</dt>
@@ -496,7 +502,7 @@ export default function Hero() {
                 ) : (
                   <ul className="flex flex-wrap gap-2">
                     {dish.ingredients.map((ing) => (
-                      <li key={ing} className="rounded-full border border-cream/15 bg-ink/40 px-3 py-1.5 text-xs text-cream/80">
+                      <li key={ing} className="rounded-full border border-line bg-ink/60 px-3 py-1.5 text-xs text-cream/80">
                         {ing}
                       </li>
                     ))}
@@ -516,7 +522,7 @@ export default function Hero() {
       {/* Plate carousel */}
       <div className="container-lux relative z-10 mt-10">
         <div className="glass flex items-center gap-2 rounded-full p-2">
-          <button type="button" onClick={prev} aria-label="Previous dish" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-cream/20 transition hover:border-gold hover:text-gold">
+          <button type="button" onClick={prev} aria-label="Previous dish" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line transition hover:border-gold hover:text-gold">
             <ChevronLeft size={18} />
           </button>
           <div ref={railRef} className="no-scrollbar flex flex-1 snap-x gap-2 overflow-x-auto scroll-smooth" role="tablist" aria-label="Choose a dish">
@@ -530,7 +536,7 @@ export default function Hero() {
                 aria-label={d.name}
                 onClick={() => goTo(i)}
                 className={`group flex shrink-0 snap-center items-center gap-3 rounded-full py-1.5 pl-1.5 pr-4 transition ${
-                  i === active ? "bg-cream/10 ring-1 ring-gold" : "hover:bg-cream/5"
+                  i === active ? "bg-gold/10 ring-1 ring-gold" : "hover:bg-gold/5"
                 }`}
               >
                 <span className={`relative h-11 w-11 overflow-hidden rounded-full ring-2 transition ${i === active ? "ring-gold" : "ring-transparent"}`}>
@@ -547,7 +553,7 @@ export default function Hero() {
                   <span className={`block whitespace-nowrap text-xs font-medium ${i === active ? "text-cream" : "text-cream/60"}`}>
                     {d.name}
                   </span>
-                  <span className="block text-[11px] text-gold">${d.price}</span>
+                  <span className="block text-[11px] font-semibold text-gold-light">${d.price}</span>
                 </span>
               </button>
             ))}

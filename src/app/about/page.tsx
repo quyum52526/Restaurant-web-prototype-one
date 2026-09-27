@@ -54,8 +54,8 @@ export default function AboutPage() {
                   <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold/15 text-gold">
                     <Icon size={22} />
                   </span>
-                  <p className="mt-8 font-serif text-sm text-gold">0{i + 1}</p>
-                  <h3 className="mt-1 font-serif text-2xl">{p.title}</h3>
+                  <p className="mt-8 font-display text-sm text-gold">0{i + 1}</p>
+                  <h3 className="mt-1 font-display text-2xl">{p.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-cream/60">{p.text}</p>
                 </article>
               </Reveal>
@@ -83,7 +83,7 @@ export default function AboutPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
                     <div className="absolute bottom-0 p-6">
                       <p className="text-xs uppercase tracking-[0.25em] text-gold">{chef.role}</p>
-                      <h3 className="mt-1 font-serif text-3xl">{chef.name}</h3>
+                      <h3 className="mt-1 font-display text-3xl">{chef.name}</h3>
                     </div>
                   </div>
                   <p className="mt-5 text-sm leading-relaxed text-cream/60">{chef.bio}</p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             <Reveal key={m.year} delay={i * 0.06}>
               <li className="relative pb-10 last:pb-0">
                 <span className="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full border-2 border-gold bg-ink" />
-                <p className="font-serif text-3xl text-gold">{m.year}</p>
+                <p className="font-display text-3xl text-gold">{m.year}</p>
                 <p className="mt-2 text-cream/70">{m.text}</p>
               </li>
             </Reveal>
@@ -134,7 +134,7 @@ export default function AboutPage() {
             ))}
           </div>
           <div className="mt-16 flex flex-col items-center gap-5 text-center">
-            <p className="max-w-lg font-serif text-3xl">Come and see the fire for yourself.</p>
+            <p className="max-w-lg font-display text-3xl">Come and see the fire for yourself.</p>
             <Link href="/reservations" className="btn-gold">
               Reserve a table <ArrowRight size={16} />
             </Link>

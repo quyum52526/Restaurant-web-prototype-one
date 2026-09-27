@@ -118,7 +118,7 @@ export default function BookingForm() {
       <div className="container-lux py-20">
         <div className="glass mx-auto max-w-xl rounded-[2rem] p-10 text-center">
           <CircleCheck size={52} className="mx-auto text-gold" />
-          <h2 className="mt-6 font-serif text-4xl">Your table is reserved</h2>
+          <h2 className="mt-6 font-display text-4xl">Your table is reserved</h2>
           <p className="mt-3 text-cream/65">
             Thank you, {name.split(" ")[0]}. A confirmation will be sent to {email}.
           </p>
@@ -167,7 +167,7 @@ export default function BookingForm() {
                   <span className="text-[10px] uppercase tracking-wider">
                     {dt.toLocaleDateString("en-US", { weekday: "short" })}
                   </span>
-                  <span className="font-serif text-2xl">{day}</span>
+                  <span className="font-display text-2xl">{day}</span>
                   <span className="text-[10px]">{closed ? "Closed" : dt.toLocaleDateString("en-US", { month: "short" })}</span>
                 </button>
               );
@@ -264,7 +264,7 @@ export default function BookingForm() {
                   seating === opt.id ? "border-gold bg-gold/10" : "border-cream/15 hover:border-cream/40"
                 }`}
               >
-                <p className="font-serif text-lg">{opt.label}</p>
+                <p className="font-display text-lg">{opt.label}</p>
                 <p className="mt-1 text-xs text-cream/55">{opt.detail}</p>
               </button>
             ))}
@@ -344,7 +344,7 @@ function Step({ n, title, icon, children }: { n: number; title: string; icon: Re
         <span className="grid h-10 w-10 place-items-center rounded-full border border-gold/50 text-gold">{icon}</span>
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-cream/40">Step {n}</p>
-          <h2 id={`step-${n}`} className="font-serif text-2xl">{title}</h2>
+          <h2 id={`step-${n}`} className="font-display text-2xl">{title}</h2>
         </div>
       </div>
       {children}

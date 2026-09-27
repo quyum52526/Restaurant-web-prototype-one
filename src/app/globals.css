@@ -15,6 +15,20 @@
     @apply bg-gold text-ink;
   }
 
+  /* Headings: heavy, tight display type for a modern culinary feel. */
+  .font-display {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* An <em> inside a heading becomes a gold script flourish, like the logo's wordmark. */
+  .font-display em {
+    @apply font-script text-gold-light;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(0.85);
     cursor: pointer;
@@ -39,7 +53,17 @@
   }
 
   .glass {
-    @apply border border-cream/10 bg-cream/[0.04] backdrop-blur-xl;
+    @apply border border-line bg-panel/80 backdrop-blur-xl;
+  }
+
+  /* Solid coffee surface with a faint amber edge. */
+  .surface {
+    @apply border border-line bg-panel;
+  }
+
+  /* Cherry-trimmed tag with crisp gold text. */
+  .tag {
+    @apply rounded-full border border-cherry-light bg-cherry/60 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-gold-light;
   }
 
   .field {

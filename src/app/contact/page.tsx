@@ -30,7 +30,7 @@ export default function ContactPage() {
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold/15 text-gold">
               <Icon size={20} />
             </span>
-            <h2 className="mt-6 font-serif text-2xl">{title}</h2>
+            <h2 className="mt-6 font-display text-2xl">{title}</h2>
             {lines.map((l) => (
               <p key={l} className="mt-1 break-words text-sm text-cream/60">{l}</p>
             ))}
@@ -47,12 +47,12 @@ export default function ContactPage() {
 
       <section className="container-lux grid gap-6 pb-24 lg:grid-cols-[1.3fr_1fr]">
         {/* Map placeholder */}
-        <div className="relative min-h-[380px] overflow-hidden rounded-3xl border border-line bg-[#12100d]">
+        <div className="relative min-h-[380px] overflow-hidden rounded-3xl border border-line bg-[#100C09]">
           <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 500" aria-hidden>
             <defs>
               <pattern id="blocks" width="80" height="80" patternUnits="userSpaceOnUse">
-                <rect width="80" height="80" fill="#15120f" />
-                <rect x="6" y="6" width="68" height="68" rx="6" fill="#1b1814" />
+                <rect width="80" height="80" fill="#1A1410" />
+                <rect x="6" y="6" width="68" height="68" rx="6" fill="#221a14" />
               </pattern>
             </defs>
             <rect width="800" height="500" fill="url(#blocks)" />
@@ -61,8 +61,8 @@ export default function ContactPage() {
             <path d="M380 0 V500" stroke="#2a251f" strokeWidth="14" />
             <path d="M120 0 L260 500" stroke="#2a251f" strokeWidth="9" />
             <path d="M600 0 L540 500" stroke="#2a251f" strokeWidth="9" />
-            <circle cx="400" cy="230" r="80" fill="#c9a45c" opacity="0.08" />
-            <circle cx="400" cy="230" r="40" fill="#c9a45c" opacity="0.12" />
+            <circle cx="400" cy="230" r="80" fill="#F59E0B" opacity="0.08" />
+            <circle cx="400" cy="230" r="40" fill="#F59E0B" opacity="0.12" />
           </svg>
           <div className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-full">
             <span className="grid h-14 w-14 place-items-center rounded-full rounded-bl-none bg-gold text-ink shadow-2xl [transform:rotate(-45deg)]">
@@ -71,7 +71,7 @@ export default function ContactPage() {
           </div>
           <div className="glass absolute bottom-5 left-5 right-5 flex flex-col gap-3 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="font-serif text-lg">{RESTAURANT.name}</p>
+              <p className="font-display text-lg">{RESTAURANT.name}</p>
               <p className="text-xs text-cream/60">{RESTAURANT.address.line1}, {RESTAURANT.address.line2}</p>
             </div>
             <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="btn-gold !py-2.5">
@@ -82,7 +82,7 @@ export default function ContactPage() {
 
         {/* Hours */}
         <div className="glass rounded-3xl p-8">
-          <h2 className="flex items-center gap-2 font-serif text-2xl">
+          <h2 className="flex items-center gap-2 font-display text-2xl">
             <Clock size={20} className="text-gold" /> Opening Hours
           </h2>
           <ul className="mt-6 space-y-4">
@@ -103,7 +103,7 @@ export default function ContactPage() {
         <div className="container-lux grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <p className="eyebrow">Inquiries</p>
-            <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
+            <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">
               Private dining, events &amp; <em className="text-gold-light">everything</em> else
             </h2>
             <p className="mt-5 text-cream/60">

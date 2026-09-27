@@ -45,7 +45,7 @@ export default function ReservationTeaser() {
           <div className="relative grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-center">
             <div>
               <p className="eyebrow">Reservations</p>
-              <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
+              <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">
                 Reserve your <em className="text-gold-light">table</em>
               </h2>
               <p className="mt-4 max-w-sm text-cream/65">

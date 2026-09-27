@@ -45,7 +45,7 @@ export default function CategoryBento() {
                 </span>
                 <div className="relative">
                   <p className="text-xs uppercase tracking-[0.3em] text-gold">0{i + 1}</p>
-                  <h3 className="mt-2 font-serif text-3xl md:text-4xl">{cat.title}</h3>
+                  <h3 className="mt-2 font-display text-3xl md:text-4xl">{cat.title}</h3>
                   <p className="mt-2 max-w-xs text-sm text-cream/70">{cat.blurb}</p>
                 </div>
               </Link>

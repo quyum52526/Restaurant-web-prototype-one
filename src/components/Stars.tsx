@@ -7,7 +7,7 @@ export default function Stars({ value, size = 14 }: { value: number; size?: numb
         <Star
           key={i}
           size={size}
-          className={i < Math.round(value) ? "fill-gold text-gold" : "text-cream/25"}
+          className={i < Math.round(value) ? "fill-gold-light text-gold-light" : "text-cream/20"}
         />
       ))}
     </div>

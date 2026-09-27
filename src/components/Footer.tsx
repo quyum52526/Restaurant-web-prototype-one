@@ -7,7 +7,8 @@ import SafeImage from "./SafeImage";
 
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-wine bg-panel/60">
+    <footer className="relative border-t border-line bg-panel">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cherry-light to-transparent" aria-hidden />
       <div className="container-lux grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.2fr] lg:py-20">
         <div className="space-y-5">
           <Logo imageClassName="h-20" />
@@ -19,7 +20,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="flex items-center gap-2 font-serif text-lg">
+          <h3 className="flex items-center gap-2 font-display text-lg">
             <Clock size={16} className="text-gold" /> Opening Hours
           </h3>
           <ul className="mt-5 space-y-3 text-sm">
@@ -33,7 +34,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="flex items-center gap-2 font-serif text-lg">
+          <h3 className="flex items-center gap-2 font-display text-lg">
             <MapPin size={16} className="text-gold" /> Visit Us
           </h3>
           <address className="mt-5 space-y-3 text-sm not-italic text-cream/70">
@@ -63,7 +64,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="flex items-center gap-2 font-serif text-lg">
+          <h3 className="flex items-center gap-2 font-display text-lg">
             <Camera size={16} className="text-gold" /> {RESTAURANT.instagram}
           </h3>
           <div className="mt-5 grid grid-cols-3 gap-2">
@@ -87,8 +88,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="bg-wine-dark/60">
-        <div className="container-lux flex flex-col items-center justify-between gap-2 py-6 text-xs text-cream/60 md:flex-row">
+      <div className="border-t border-line bg-ink">
+        <div className="container-lux flex flex-col items-center justify-between gap-2 py-6 text-xs text-cream/50 md:flex-row">
           <p>© {new Date().getFullYear()} {RESTAURANT.name}. All rights reserved.</p>
           <p>Crafted with fire &amp; patience.</p>
         </div>

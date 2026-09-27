@@ -9,21 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0b0a09",
-        panel: "#15120f",
-        line: "rgba(243, 236, 224, 0.1)",
+        // Roasted-espresso base, matched to the chef logo's dark outline.
+        ink: "#100C09",
+        panel: "#1A1410",
+        line: "rgba(245, 158, 11, 0.15)",
         cream: "#f3ece0",
-        // Brand primary (amber).
+        // Brand primary: the logo's golden halo and "AI" lettering.
         gold: {
           DEFAULT: "#F59E0B",
           light: "#FBBF24",
           dark: "#B45309",
         },
-        // Brand secondary (wine).
-        wine: {
-          DEFAULT: "#881337",
-          light: "#9F1239",
-          dark: "#4C0519",
+        // Secondary trim only (thin lines, badge tags), never a large surface.
+        cherry: {
+          DEFAULT: "#58141F",
+          light: "#7A1E2C",
         },
         // Driven by the --accent CSS variable, which GSAP tweens per dish.
         accent:
@@ -31,7 +31,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-        serif: ['"Playfair Display Variable"', "Georgia", "serif"],
+        display: ['"Plus Jakarta Sans Variable"', "var(--font-geist-sans)", "system-ui", "sans-serif"],
+        // Handcrafted script echoing the logo's "Restaurant" wordmark.
+        script: ["Playball", "cursive"],
       },
     },
   },

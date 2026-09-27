@@ -22,7 +22,7 @@ export default function Logo({ imageClassName = "h-12 md:h-14", showName = true 
       />
       {showName && (
         <span className="leading-none">
-          <span className="block font-serif text-xl tracking-wide">{RESTAURANT.name}</span>
+          <span className="block font-display text-xl tracking-wide">{RESTAURANT.name}</span>
           <span className="block text-[10px] uppercase tracking-[0.3em] text-cream/50">
             {RESTAURANT.tagline}
           </span>

@@ -31,7 +31,7 @@ export default function InquiryForm() {
     return (
       <div className="flex h-full flex-col items-center justify-center py-16 text-center" role="status">
         <CircleCheck size={48} className="text-gold" />
-        <h3 className="mt-5 font-serif text-3xl">Message received</h3>
+        <h3 className="mt-5 font-display text-3xl">Message received</h3>
         <p className="mt-2 max-w-sm text-sm text-cream/60">
           Thanks, {form.name.split(" ")[0]}. Our team replies within one business day.
         </p>

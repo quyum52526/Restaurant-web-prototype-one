@@ -45,13 +45,13 @@ export default function Reviews() {
             >
               <div>
                 <Quote size={28} className="text-gold/60" />
-                <blockquote className="mt-5 font-serif text-xl leading-relaxed text-cream/90">
+                <blockquote className="mt-5 font-display text-xl font-medium leading-relaxed tracking-normal text-cream/90">
                   &ldquo;{r.quote}&rdquo;
                 </blockquote>
               </div>
               <figcaption className="mt-8 flex items-center justify-between border-t border-line pt-6">
                 <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-full bg-gold/15 font-serif text-gold">
+                  <span className="grid h-11 w-11 place-items-center rounded-full bg-gold/15 font-display text-gold">
                     {r.name.charAt(0)}
                   </span>
                   <div>

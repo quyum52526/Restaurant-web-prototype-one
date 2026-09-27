@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled || open ? "border-b border-wine/60 bg-ink/80 py-3 backdrop-blur-xl" : "py-5"
+        scrolled || open ? "border-b border-line bg-ink/85 py-3 backdrop-blur-xl" : "py-5"
       }`}
     >
       <div className="container-lux flex items-center justify-between">
@@ -46,7 +46,7 @@ export default function Navbar() {
               href={link.href}
               aria-current={isActive(link.href) ? "page" : undefined}
               className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-                isActive(link.href) ? "text-gold" : "text-cream/70 hover:text-cream"
+                isActive(link.href) ? "font-semibold text-gold-light" : "text-cream/70 hover:text-gold-light"
               }`}
             >
               {link.label}
@@ -68,7 +68,7 @@ export default function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid h-11 w-11 place-items-center rounded-full border border-cream/20 transition hover:border-gold hover:bg-wine/40 lg:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-line transition hover:border-gold hover:bg-gold/10 lg:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -87,7 +87,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               aria-current={isActive(link.href) ? "page" : undefined}
-              className={`border-b border-line py-4 font-serif text-2xl ${
+              className={`border-b border-line py-4 font-display text-2xl font-bold ${
                 isActive(link.href) ? "text-gold" : "text-cream"
               }`}
             >
