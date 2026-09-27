@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     "A luxury live-fire restaurant serving dry-aged steaks, day-boat seafood and seasonal plates. Explore the menu and reserve your table.",
   applicationName: RESTAURANT.name,
   icons: {
-    icon: RESTAURANT.logo,
-    apple: RESTAURANT.logo,
+    icon: RESTAURANT.favicon,
+    apple: RESTAURANT.favicon,
   },
 };
 

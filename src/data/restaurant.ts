@@ -48,6 +48,7 @@ export const RESTAURANT = {
   name: "Ai Restaurant",
   tagline: "Fire, Field & Sea",
   logo: "/logo.png",
+  favicon: "/favicon.png",
   phone: "+1 (555) 014-2290",
   email: "hello@ai-restaurant.example",
   address: {

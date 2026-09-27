@@ -37,7 +37,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container-lux flex items-center justify-between">
-        <Logo />
+        <Logo imageClassName="h-14 md:h-20" showName={false} />
 
         <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => (
